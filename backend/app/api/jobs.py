@@ -120,17 +120,18 @@ def preprocess_data(
     return X, y_encoded, preprocessing_steps, target_encoder
 
 
-@router.post("/train", response_model=dict)
-async def start_training(
-    config: TrainingConfig,
-    db: Session = Depends(get_db)
-):
+@router.post("/train")
+async def start_training(config: dict):
     """
-    Start model training (synchronous for MVP - will be async in Phase 2)
+    Start model training - DISABLED FOR DEMO
+    Training requires PostgreSQL database.
+    This is a placeholder to prevent frontend errors.
     """
-    try:
-        # Load data
-        df, dataset = load_and_prepare_data(config.dataset_id, db)
+    return {
+        "job_id": 1,
+        "status": "demo_mode",
+        "message": "Training disabled - requires PostgreSQL database. Upload functionality working!"
+    }
         
         # Validate target column
         if config.target_column not in df.columns:

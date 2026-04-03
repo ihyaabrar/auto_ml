@@ -4,13 +4,14 @@ from fastapi.staticfiles import StaticFiles
 import os
 
 from .core.config import get_settings
-from .core.database import Base, engine
+# Temporarily disable DB initialization for testing without PostgreSQL
+# from .core.database import Base, engine
 from .api import projects, jobs
 
 settings = get_settings()
 
-# Create database tables
-Base.metadata.create_all(bind=engine)
+# Create database tables - DISABLED FOR NOW
+# Base.metadata.create_all(bind=engine)
 
 # Create FastAPI app
 app = FastAPI(
