@@ -22,18 +22,29 @@ Write-Host "Initializing Railway project..."
 Set-Location $PSScriptRoot
 railway init --name auto-ml-platform 2>$null | Out-Null
 
+# Link to the project
+Write-Host "Linking to Railway project..."
+railway link 2>$null | Out-Null
+
 # Add PostgreSQL
 Write-Host "Adding PostgreSQL database..."
-railway add postgresql
+railway add --database postgres
 
 # Get DATABASE_URL
 Write-Host "Waiting for database provisioning..."
 Start-Sleep -Seconds 5
 $DATABASE_URL = railway variables get DATABASE_URL 2>$null
 
+# Use provided PostgreSQL URL if available
+if ([string]::IsNullOrEmpty($DATABASE_URL)) {
+    Write-Host "Database not found in Railway variables." -ForegroundColor Yellow
+    Write-Host "Using manually provided DATABASE_URL..." -ForegroundColor Cyan
+    $DATABASE_URL = "postgresql://postgres:PcIPBCirhhyGQHjerMOjzGUgcedqeZxa@junction.proxy.rlwy.net:23565/railway"
+}
+
 if ([string]::IsNullOrEmpty($DATABASE_URL)) {
     Write-Host "Database not provisioned yet!" -ForegroundColor Red
-    Write-Host "Please wait and run this script again."
+    Write-Host "Please wait and run this script again." -ForegroundColor Yellow
     exit 1
 }
 
