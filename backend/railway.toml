@@ -1,0 +1,11 @@
+[build]
+builder = "dockerfile"
+
+[deploy]
+healthcheck_path = "/"
+healthcheck_port = "8000"
+restart_policy = "on-failure"
+
+[[services]]
+name = "backend"
+port = 8000
